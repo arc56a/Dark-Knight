@@ -122,7 +122,6 @@
             width: 100%;
             flex-direction: column;
             align-items: center;
-            /* No top border or padding here, will be moved dynamically */
         }
         .profile-picture-upload {
             width: 120px;
@@ -173,7 +172,7 @@
             border-bottom: 1px solid #4a5568;
             color: #e2e8f0;
             font-size: 0.9rem;
-            z-index: 10; /* لضمان ظهور الرأس فوق القائمة الجانبية عند الفتح */
+            z-index: 10;
         }
         .app-title-header {
             color: #a78bfa;
@@ -211,21 +210,20 @@
         .sidebar {
             position: absolute;
             top: 0;
-            /* للغة العربية: right: 0; transform: translateX(100%); */
-            left: 0; /* يبدأ من اليسار */
-            width: 280px; /* عرض القائمة الجانبية */
+            left: 0;
+            width: 280px;
             height: 100%;
-            background-color: #1a202c; /* خلفية أغمق للقائمة الجانبية */
+            background-color: #1a202c;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
             transition: transform 0.3s ease-in-out;
-            z-index: 20; /* ليكون فوق المحتوى الرئيسي */
+            z-index: 20;
             display: flex;
             flex-direction: column;
             padding-top: 1rem;
             transform: translateX(-100%); /* Start hidden */
         }
         .sidebar.open {
-            transform: translateX(0); /* يفتح من اليسار */
+            transform: translateX(0);
         }
         .sidebar-header {
             display: flex;
@@ -266,7 +264,7 @@
             border-radius: 0.5rem;
             margin-bottom: 0.5rem;
             transition: background-color 0.2s ease, color 0.2s ease;
-            text-align: right; /* محاذاة النص لليمين */
+            text-align: right;
         }
         .sidebar-nav-item:hover {
             background-color: #4a5568;
@@ -279,26 +277,21 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
-            z-index: 15; /* بين القائمة الجانبية والمحتوى */
-            display: none; /* مخفية افتراضياً */
+            z-index: 15;
+            display: none;
         }
         .overlay.active {
             display: block;
         }
 
-
-        /* أنماط منطقة المحتوى الرئيسية */
-        .content-area {
+        /* أنماط منطقة المحتوى الرئيسية (قائمة المستخدمين والبحث) */
+        .users-list-view {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
             padding: 1rem;
-        }
-        .top-section {
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #4a5568;
-            margin-bottom: 1rem;
+            background-color: #2d3748; /* نفس الخلفية الرئيسية للتماسك */
         }
         .search-bar {
             display: flex;
@@ -329,16 +322,19 @@
         .search-button:hover {
             background-color: #8b5cf6;
         }
-        .latest-chats-header {
-            text-align: right; /* محاذاة لليمين */
+        .users-list-header {
+            text-align: right;
             margin-bottom: 1rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #e2e8f0;
         }
-        .latest-chats-list {
+        .users-list {
             display: flex;
             flex-direction: column;
             gap: 0.75rem;
         }
-        .chat-item {
+        .user-item {
             display: flex;
             align-items: center;
             gap: 1rem;
@@ -347,59 +343,83 @@
             border-radius: 0.75rem;
             cursor: pointer;
             transition: background-color 0.2s ease;
-            text-align: right; /* محاذاة النص لليمين */
+            text-align: right;
         }
-        .chat-item:hover {
+        .user-item:hover {
             background-color: #4a5568;
         }
-        .chat-item-avatar {
+        .user-item-avatar {
             width: 50px;
             height: 50px;
             border-radius: 50%;
             object-fit: cover;
             border: 1px solid #a78bfa;
-            flex-shrink: 0; /* لمنع الصورة من الانكماش */
+            flex-shrink: 0;
         }
-        .chat-item-info {
+        .user-item-info {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            align-items: flex-end; /* محاذاة المعلومات لليمين */
+            align-items: flex-end;
         }
-        .chat-item-name {
+        .user-item-name {
             font-weight: 600;
             color: #e2e8f0;
             font-size: 1rem;
         }
-        .chat-item-last-message {
+        .user-item-username {
             font-size: 0.875rem;
             color: #a0aec0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 100%;
         }
-        .chat-item-time {
-            font-size: 0.75rem;
-            color: #94a3b8;
-            flex-shrink: 0;
-            padding-left: 0.5rem; /* مسافة لليمين من الوقت */
+        .no-users-message {
+            text-align: center;
+            color: #a0aec0;
+            padding: 2rem;
         }
 
 
-        /* أنماط منطقة الرسائل الفعلية (أسفل قسم آخر الدردشات) */
+        /* أنماط واجهة الدردشة النشطة (تظهر عند اختيار مستخدم) */
         .active-chat-view {
-            flex-grow: 1; /* يجعلها تمتد لتأخذ المساحة المتبقية */
-            display: flex;
+            display: none; /* مخفية افتراضياً */
             flex-direction: column;
-            border-top: 1px solid #4a5568; /* خط فاصل */
-            padding-top: 1rem; /* تباعد علوي */
-            margin-top: 1rem;
+            height: 100%;
+            width: 100%;
+            background-color: #2d3748;
+        }
+        .active-chat-header {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background-color: #2d3748;
+            border-bottom: 1px solid #4a5568;
+            color: #e2e8f0;
+        }
+        .back-button {
+            background: none;
+            border: none;
+            color: #a78bfa;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0 0.5rem;
+            transition: color 0.2s ease;
+            margin-left: 1rem; /* مسافة لليسار */
+            order: 2; /* ترتيبه بعد عنوان الدردشة */
+        }
+        .back-button:hover {
+            color: #8b5cf6;
+        }
+        .active-chat-partner-name {
+            flex-grow: 1;
+            text-align: right; /* محاذاة لليمين */
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-right: 1rem;
         }
         .messages-area {
             flex-grow: 1;
             overflow-y: auto;
-            padding: 0.5rem; /* تباعد أقل هنا لأنها داخل active-chat-view */
+            padding: 1rem;
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
@@ -463,7 +483,7 @@
             .container {
                 height: 95vh;
                 margin: 0 10px;
-                padding: 0; /* إزالة التباعد من الحاوية للسماح للمحتوى الداخلي بالتحكم */
+                padding: 0;
             }
             body {
                 padding: 10px;
@@ -475,14 +495,10 @@
                 padding: 0.5rem 1rem;
             }
             .sidebar {
-                width: 75%; /* عرض أكبر للقائمة الجانبية على الجوال */
+                width: 75%;
             }
-            .content-area {
+            .users-list-view, .active-chat-view {
                 padding: 0.75rem;
-            }
-            .active-chat-view {
-                padding: 0; /* إزالة التباعد من هنا ليكون داخل messages-area */
-                margin-top: 0.75rem; /* مسافة أقل */
             }
             .messages-area {
                 padding: 0.75rem;
@@ -552,56 +568,31 @@
             <!-- طبقة التراكب (Overlay) لإغلاق القائمة الجانبية بالنقر خارجها -->
             <div id="sidebarOverlay" class="overlay"></div>
 
-            <!-- منطقة المحتوى الرئيسية (للبحث والدردشات) -->
-            <div class="content-area">
-                <!-- قسم البحث وآخر الدردشات -->
-                <div class="top-section">
-                    <div class="search-bar">
-                        <input type="text" id="searchInput" placeholder="ابحث عن مستخدمين..." class="search-input">
-                        <button id="searchButton" class="search-button">بحث</button>
-                    </div>
-                    <div class="latest-chats-header">
-                        <h3 class="text-xl font-semibold text-gray-100">آخر الدردشات</h3>
-                    </div>
-                    <div id="latestChatsList" class="latest-chats-list">
-                        <!-- عناصر الدردشة الوهمية -->
-                        <div class="chat-item">
-                            <img src="https://placehold.co/50x50/3b4252/e2e8f0?text=صورة" alt="صورة المستخدم" class="chat-item-avatar">
-                            <div class="chat-item-info">
-                                <span class="chat-item-name">مستخدم 1</span>
-                                <span class="chat-item-last-message">مرحباً بك! هذه آخر رسالة...</span>
-                            </div>
-                            <span class="chat-item-time">الآن</span>
-                        </div>
-                        <div class="chat-item">
-                            <img src="https://placehold.co/50x50/3b4252/e2e8f0?text=صورة" alt="صورة المستخدم" class="chat-item-avatar">
-                            <div class="chat-item-info">
-                                <span class="chat-item-name">مستخدم 2</span>
-                                <span class="chat-item-last-message">كيف حالك؟ أتمنى أن تكون بخير...</span>
-                            </div>
-                            <span class="chat-item-time">أمس</span>
-                        </div>
-                         <div class="chat-item">
-                            <img src="https://placehold.co/50x50/3b4252/e2e8f0?text=صورة" alt="صورة المستخدم" class="chat-item-avatar">
-                            <div class="chat-item-info">
-                                <span class="chat-item-name">مستخدم 3</span>
-                                <span class="chat-item-last-message">هل يمكننا التحدث لاحقاً؟</span>
-                            </div>
-                            <span class="chat-item-time">قبل ساعة</span>
-                        </div>
-                    </div>
+            <!-- منطقة عرض قائمة المستخدمين/البحث -->
+            <div id="usersListView" class="users-list-view">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="ابحث عن مستخدمين..." class="search-input">
+                    <button id="searchButton" class="search-button">بحث</button>
                 </div>
+                <h3 class="users-list-header">المستخدمون المتوفرون</h3>
+                <div id="usersList" class="users-list">
+                    <div class="loading-indicator">جارٍ تحميل المستخدمين...</div>
+                    <!-- سيتم تحميل المستخدمين هنا ديناميكياً -->
+                </div>
+            </div>
 
-                <!-- منطقة الرسائل الفعلية (يمكن إخفاؤها/إظهارها عند اختيار دردشة) -->
-                <div id="activeChatView" class="active-chat-view">
-                    <div id="messagesArea" class="messages-area">
-                        <div class="loading-indicator" id="loadingIndicator">جارٍ تحميل الرسائل...</div>
-                        <!-- الرسائل ستضاف هنا ديناميكياً -->
-                    </div>
-                    <div class="message-input-area">
-                        <input type="text" id="messageInput" placeholder="اكتب رسالتك..." class="message-input">
-                        <button id="sendButton" class="send-button">إرسال</button>
-                    </div>
+            <!-- واجهة الدردشة النشطة (مخفية مبدئياً) -->
+            <div id="activeChatView" class="active-chat-view">
+                <div class="active-chat-header">
+                    <button id="backToUsersListButton" class="back-button">←</button>
+                    <span id="activeChatPartnerName" class="active-chat-partner-name"></span>
+                </div>
+                <div id="messagesArea" class="messages-area">
+                    <div class="loading-indicator">جارٍ تحميل الرسائل...</div>
+                </div>
+                <div class="message-input-area">
+                    <input type="text" id="messageInput" placeholder="اكتب رسالتك..." class="message-input">
+                    <button id="sendButton" class="send-button">إرسال</button>
                 </div>
             </div>
         </div>
@@ -660,16 +651,27 @@
         const sidebarUsername = document.getElementById('sidebarUsername');
         const sidebarFullName = document.getElementById('sidebarFullName');
 
+        const usersListView = document.getElementById('usersListView'); // New: Container for search and users list
+        const searchInput = document.getElementById('searchInput'); // Existing, but now functional
+        const searchButton = document.getElementById('searchButton'); // Existing, but now functional
+        const usersList = document.getElementById('usersList'); // Was latestChatsList, renamed for clarity
+
+        const activeChatView = document.getElementById('activeChatView'); // New: Container for active chat messages
+        const activeChatPartnerName = document.getElementById('activeChatPartnerName'); // New
+        const backToUsersListButton = document.getElementById('backToUsersListButton'); // New
+
         const messagesArea = document.getElementById('messagesArea');
         const messageInput = document.getElementById('messageInput');
         const sendButton = document.getElementById('sendButton');
-        const loadingIndicator = document.getElementById('loadingIndicator');
+        const loadingIndicator = messagesArea.querySelector('.loading-indicator'); // Adjusted to be specific to messagesArea
+
         const currentUserIdSpan = document.getElementById('currentUserId');
         const logoutButton = document.getElementById('logoutButton');
 
         let isSignUpMode = false;
         let currentUserId = null;
         let currentUserProfile = null;
+        let currentChatPartner = null; // Stores the profile of the user currently chatting with
 
         // /////////////////////////////////////////////////////////////////
         // /////////////////// وظائف المصادقة ///////////////////////////////
@@ -699,7 +701,7 @@
             fullNameInput.value = '';
             usernameInput.value = '';
             profilePictureInput.value = '';
-            profilePicturePreview.src = "https://placehold.co/120x120/4a5568/a0aec0?text=صورة"; // إعادة تعيين معاينة الصورة
+            profilePicturePreview.src = "https://placehold.co/120x120/4a5568/a0aec0?text=صورة";
             profilePicturePreview.style.display = 'block';
             defaultProfileIcon.style.display = 'none';
         });
@@ -884,9 +886,7 @@
          */
         supabase.auth.onAuthStateChange(async (event, session) => {
             if (session) {
-                // المستخدم مسجل الدخول
                 currentUserId = session.user.id;
-                // جلب بيانات الملف الشخصي للمستخدم
                 const { data: profileData, error: profileError } = await supabase
                     .from('profiles')
                     .select('username, full_name, avatar_url')
@@ -925,10 +925,11 @@
 
                 authContainer.style.display = 'none';
                 mainChatScreen.classList.remove('hidden'); // Show main chat screen
-                loadMessages();
+                loadUsers(); // Load users for the main chat list/search
             } else {
                 currentUserId = null;
                 currentUserProfile = null;
+                currentChatPartner = null; // Clear active chat partner
                 authContainer.style.display = 'flex';
                 mainChatScreen.classList.add('hidden'); // Hide main chat screen
                 messagesArea.innerHTML = '';
@@ -957,8 +958,8 @@
          * تبديل رؤية القائمة الجانبية.
          */
         menuButton.addEventListener('click', () => {
-            sidebar.classList.toggle('-translate-x-full'); // For left-to-right slide
-            sidebarOverlay.classList.toggle('active'); // Show/hide overlay
+            sidebar.classList.toggle('-translate-x-full');
+            sidebarOverlay.classList.toggle('active');
         });
 
         /**
@@ -969,10 +970,125 @@
             sidebarOverlay.classList.remove('active');
         });
 
+        // /////////////////////////////////////////////////////////////////
+        // /////////////////// وظائف قائمة المستخدمين والبحث /////////////////
+        // /////////////////////////////////////////////////////////////////
+
+        /**
+         * عرض المستخدمين في القائمة الرئيسية.
+         * @param {Array} users - قائمة المستخدمين لعرضها.
+         */
+        function displayUsers(users) {
+            usersList.innerHTML = ''; // Clear previous users/messages
+            if (users.length === 0) {
+                usersList.innerHTML = '<div class="no-users-message">لا توجد مستخدمون مطابقون.</div>';
+                return;
+            }
+
+            users.forEach(user => {
+                if (user.id === currentUserId) return; // Don't show current user in the list
+
+                const userItem = document.createElement('div');
+                userItem.classList.add('user-item');
+                userItem.dataset.userId = user.id;
+                userItem.dataset.username = user.username;
+                userItem.dataset.fullName = user.full_name;
+                userItem.dataset.avatarUrl = user.avatar_url || "https://placehold.co/50x50/3b4252/e2e8f0?text=صورة";
+
+                userItem.innerHTML = `
+                    <img src="${userItem.dataset.avatarUrl}" alt="صورة المستخدم" class="user-item-avatar">
+                    <div class="user-item-info">
+                        <span class="user-item-name">${user.full_name || 'اسم غير معروف'}</span>
+                        <span class="user-item-username">@${user.username || 'بدون اسم مستخدم'}</span>
+                    </div>
+                `;
+                userItem.addEventListener('click', () => startChatWithUser(user));
+                usersList.appendChild(userItem);
+            });
+        }
+
+        /**
+         * تحميل جميع المستخدمين (باستثناء المستخدم الحالي) وعرضهم.
+         */
+        async function loadUsers() {
+            usersList.innerHTML = '<div class="loading-indicator">جارٍ تحميل المستخدمين...</div>';
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('id, username, full_name, avatar_url');
+
+            if (error) {
+                console.error('خطأ في تحميل المستخدمين:', error.message);
+                usersList.innerHTML = '<div class="no-users-message text-red-500">خطأ في تحميل المستخدمين.</div>';
+                return;
+            }
+            displayUsers(data);
+        }
+
+        /**
+         * البحث عن مستخدمين بناءً على المدخلات.
+         */
+        async function searchUsers() {
+            const query = searchInput.value.trim();
+            if (query.length === 0) {
+                loadUsers(); // إذا كان البحث فارغاً، أعد تحميل جميع المستخدمين
+                return;
+            }
+
+            usersList.innerHTML = '<div class="loading-indicator">جارٍ البحث عن المستخدمين...</div>';
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('id, username, full_name, avatar_url')
+                .or(`username.ilike.%${query}%,full_name.ilike.%${query}%`); // البحث في اسم المستخدم أو الاسم الكامل
+
+            if (error) {
+                console.error('خطأ في البحث عن المستخدمين:', error.message);
+                usersList.innerHTML = '<div class="no-users-message text-red-500">خطأ في البحث.</div>';
+                return;
+            }
+            displayUsers(data);
+        }
+
+        // معالجة زر البحث والضغط على Enter في حقل البحث
+        searchButton.addEventListener('click', searchUsers);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchUsers();
+            }
+        });
 
         // /////////////////////////////////////////////////////////////////
         // /////////////////// وظائف الدردشة ///////////////////////////////
         // /////////////////////////////////////////////////////////////////
+
+        /**
+         * بدء دردشة مع مستخدم محدد.
+         * @param {Object} partnerProfile - بيانات ملف تعريف الشريك.
+         */
+        function startChatWithUser(partnerProfile) {
+            currentChatPartner = partnerProfile;
+            if (activeChatPartnerName) {
+                activeChatPartnerName.textContent = partnerProfile.username || partnerProfile.full_name || 'مستخدم غير معروف';
+            }
+
+            usersListView.style.display = 'none'; // Hide users list
+            activeChatView.style.display = 'flex'; // Show active chat view
+
+            // Load messages for this specific chat
+            loadMessagesForChat(currentChatPartner.id);
+            messageInput.focus();
+        }
+
+        /**
+         * العودة من واجهة الدردشة إلى قائمة المستخدمين.
+         */
+        backToUsersListButton.addEventListener('click', () => {
+            currentChatPartner = null; // Clear active chat partner
+            activeChatView.style.display = 'none'; // Hide active chat view
+            usersListView.style.display = 'flex'; // Show users list
+            messagesArea.innerHTML = ''; // Clear messages
+            searchInput.value = ''; // Clear search input
+            loadUsers(); // Reload all users when returning
+        });
 
         /**
          * إضافة رسالة إلى واجهة المستخدم.
@@ -983,20 +1099,18 @@
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', isSender ? 'sent' : 'received');
 
-            let senderIdentifier = message.user_id;
-            // يمكن تحسين هذا بجلب اسم المستخدم من جدول الـ profiles بشكل مسبق لجميع الرسائل
-            // أو تخزين اسم المستخدم مباشرة في جدول الرسائل
+            let senderIdentifier = 'مستخدم غير معروف';
             if (isSender && currentUserProfile && currentUserProfile.username) {
                 senderIdentifier = currentUserProfile.username;
-            } else if (!isSender) {
-                // للرسائل المستلمة، قد تحتاج لجلب اسم المستخدم من قاعدة البيانات
-                // أو إذا كانت الرسالة تتضمن اسم المستخدم، استخدمه مباشرة
-                // حالياً، سنبقيها user_id للمستخدمين الآخرين
+            } else if (!isSender && currentChatPartner && currentChatPartner.username) {
+                senderIdentifier = currentChatPartner.username;
+            } else if (message.user_id) {
+                senderIdentifier = message.user_id.substring(0, 8); // Fallback to partial ID
             }
 
             messageElement.innerHTML = `
                 <span class="font-bold text-xs ${isSender ? 'text-white' : 'text-gray-400'}">
-                    ${isSender ? 'أنت' : senderIdentifier}:
+                    ${senderIdentifier}:
                 </span><br>
                 ${message.content}
             `;
@@ -1005,30 +1119,38 @@
         }
 
         /**
-         * تحميل الرسائل الموجودة من Supabase.
+         * تحميل الرسائل لدردشة محددة.
+         * @param {string} chatPartnerId - معرف الشريك في الدردشة.
          */
-        async function loadMessages() {
-            if (!currentUserId) return;
-
-            loadingIndicator.style.display = 'block';
+        async function loadMessagesForChat(chatPartnerId) {
+            messagesArea.innerHTML = '<div class="loading-indicator">جارٍ تحميل الرسائل...</div>';
             const { data, error } = await supabase
                 .from('messages')
                 .select('*')
+                .or(`user_id.eq.${currentUserId},receiver_id.eq.${currentUserId}`) // رسائل حيث أنا مرسل أو مستلم
+                .or(`user_id.eq.${chatPartnerId},receiver_id.eq.${chatPartnerId}`) // رسائل حيث الشريك مرسل أو مستلم
                 .order('created_at', { ascending: true });
 
             if (error) {
                 console.error('خطأ في تحميل الرسائل:', error.message);
                 messagesArea.innerHTML = `<div class="text-center text-red-500 p-4">خطأ في تحميل الرسائل: ${error.message}</div>`;
-                loadingIndicator.style.display = 'none';
                 return;
             }
 
-            messagesArea.innerHTML = '';
-            data.forEach(message => {
-                const isSender = message.user_id === currentUserId;
-                addMessageToUI(message, isSender);
-            });
-            loadingIndicator.style.display = 'none';
+            messagesArea.innerHTML = ''; // Clear previous messages
+            const filteredMessages = data.filter(msg =>
+                (msg.user_id === currentUserId && msg.receiver_id === chatPartnerId) ||
+                (msg.user_id === chatPartnerId && msg.receiver_id === currentUserId)
+            );
+
+            if (filteredMessages.length === 0) {
+                messagesArea.innerHTML = '<div class="no-users-message">ابدأ الدردشة! لا توجد رسائل سابقة.</div>';
+            } else {
+                filteredMessages.forEach(message => {
+                    const isSender = message.user_id === currentUserId;
+                    addMessageToUI(message, isSender);
+                });
+            }
         }
 
         /**
@@ -1036,21 +1158,24 @@
          */
         async function sendMessage() {
             const content = messageInput.value.trim();
-            if (content.length === 0 || !currentUserId) return;
+            if (content.length === 0 || !currentUserId || !currentChatPartner) return;
 
             sendButton.disabled = true;
             messageInput.disabled = true;
 
-            const { data, error } = await supabase // FIX: Corrected destructuring assignment syntax
+            const { data, error } = await supabase
                 .from('messages')
                 .insert([
-                    { content: content, user_id: currentUserId }
+                    { content: content, user_id: currentUserId, receiver_id: currentChatPartner.id }
                 ]);
 
             if (error) {
                 console.error('خطأ في إرسال الرسالة:', error.message);
+                // يمكن إضافة رسالة خطأ للمستخدم هنا
             } else {
-                messageInput.value = '';
+                messageInput.value = ''; // مسح حقل الإدخال بعد الإرسال
+                // إضافة الرسالة إلى واجهة المستخدم مباشرة للمرسل
+                addMessageToUI({ content: content, user_id: currentUserId, receiver_id: currentChatPartner.id }, true);
             }
 
             sendButton.disabled = false;
@@ -1070,15 +1195,24 @@
             }
         });
 
+        // الاستماع للتغييرات في الوقت الفعلي على جدول الرسائل
         supabase
             .channel('public:messages')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
-                if (payload.new.user_id !== currentUserId) {
+                // إضافة الرسالة في الوقت الفعلي فقط إذا كانت موجهة إلي أو من المستخدم النشط حاليًا
+                if (currentChatPartner &&
+                    ((payload.new.user_id === currentChatPartner.id && payload.new.receiver_id === currentUserId) ||
+                     (payload.new.user_id === currentUserId && payload.new.receiver_id === currentChatPartner.id))) {
+                    
                     console.log('رسالة جديدة في الوقت الفعلي:', payload.new);
                     const newMessage = payload.new;
                     const isSender = newMessage.user_id === currentUserId;
                     addMessageToUI(newMessage, isSender);
                 }
+                // إذا لم يكن هناك دردشة مفتوحة، أعد تحميل قائمة المستخدمين لتحديث "آخر الدردشات" (إذا تم تنفيذها مستقبلاً)
+                // else if (!currentChatPartner) {
+                //     loadUsers(); // هذا سيحدث قائمة "آخر الدردشات" إذا تم دمج الرسالة الأخيرة
+                // }
             })
             .subscribe();
     </script>

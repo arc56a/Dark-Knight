@@ -222,7 +222,7 @@
             padding-top: 1rem;
             transform: translateX(-100%); /* Start hidden */
         }
-        .sidebar.open {
+        .sidebar.open { /* This class is now toggled by JS */
             transform: translateX(0);
         }
         .sidebar-header {
@@ -559,9 +559,9 @@
                     <span id="sidebarFullName" class="sidebar-fullname">الاسم الكامل</span>
                 </div>
                 <nav class="sidebar-nav">
-                    <a href="#" class="sidebar-nav-item">الملف الشخصي</a>
-                    <a href="#" class="sidebar-nav-item">الإعدادات</a>
-                    <a href="#" class="sidebar-nav-item">المساعدة</a>
+                    <a href="#" id="profileLink" class="sidebar-nav-item">الملف الشخصي</a>
+                    <a href="#" id="settingsLink" class="sidebar-nav-item">الإعدادات</a>
+                    <a href="#" id="helpLink" class="sidebar-nav-item">المساعدة</a>
                 </nav>
             </div>
 
@@ -650,20 +650,25 @@
         const sidebarAvatar = document.getElementById('sidebarAvatar');
         const sidebarUsername = document.getElementById('sidebarUsername');
         const sidebarFullName = document.getElementById('sidebarFullName');
+        
+        // Sidebar Navigation Links
+        const profileLink = document.getElementById('profileLink');
+        const settingsLink = document.getElementById('settingsLink');
+        const helpLink = document.getElementById('helpLink');
 
-        const usersListView = document.getElementById('usersListView'); // New: Container for search and users list
-        const searchInput = document.getElementById('searchInput'); // Existing, but now functional
-        const searchButton = document.getElementById('searchButton'); // Existing, but now functional
-        const usersList = document.getElementById('usersList'); // Was latestChatsList, renamed for clarity
+        const usersListView = document.getElementById('usersListView');
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const usersList = document.getElementById('usersList');
 
-        const activeChatView = document.getElementById('activeChatView'); // New: Container for active chat messages
-        const activeChatPartnerName = document.getElementById('activeChatPartnerName'); // New
-        const backToUsersListButton = document.getElementById('backToUsersListButton'); // New
+        const activeChatView = document.getElementById('activeChatView');
+        const activeChatPartnerName = document.getElementById('activeChatPartnerName');
+        const backToUsersListButton = document.getElementById('backToUsersListButton');
 
         const messagesArea = document.getElementById('messagesArea');
         const messageInput = document.getElementById('messageInput');
         const sendButton = document.getElementById('sendButton');
-        const loadingIndicator = messagesArea.querySelector('.loading-indicator'); // Adjusted to be specific to messagesArea
+        const loadingIndicator = messagesArea.querySelector('.loading-indicator');
 
         const currentUserIdSpan = document.getElementById('currentUserId');
         const logoutButton = document.getElementById('logoutButton');
@@ -671,7 +676,7 @@
         let isSignUpMode = false;
         let currentUserId = null;
         let currentUserProfile = null;
-        let currentChatPartner = null; // Stores the profile of the user currently chatting with
+        let currentChatPartner = null;
 
         // /////////////////////////////////////////////////////////////////
         // /////////////////// وظائف المصادقة ///////////////////////////////
@@ -686,16 +691,15 @@
                 authTitle.textContent = 'إنشاء حساب جديد';
                 authButton.textContent = 'إنشاء حساب';
                 toggleAuthMode.textContent = 'لدي حساب بالفعل؟ سجل الدخول';
-                // إعادة ترتيب العناصر لإنشاء حساب: صورة -> اسم كامل -> اسم مستخدم -> بريد -> كلمة مرور
-                authFieldsContainer.prepend(signupFields); // نقل حقول التسجيل إلى الأعلى
-                signupFields.style.display = 'flex'; // إظهار حقول التسجيل الجديدة
+                authFieldsContainer.prepend(signupFields);
+                signupFields.style.display = 'flex';
             } else {
                 authTitle.textContent = 'تسجيل الدخول';
                 authButton.textContent = 'تسجيل الدخول';
                 toggleAuthMode.textContent = 'ليس لديك حساب؟ أنشئ حساباً جديداً';
-                signupFields.style.display = 'none'; // إخفاء حقول التسجيل الجديدة
+                signupFields.style.display = 'none';
             }
-            authErrorMessage.textContent = ''; // مسح رسائل الخطأ عند التبديل
+            authErrorMessage.textContent = '';
             emailInput.value = '';
             passwordInput.value = '';
             fullNameInput.value = '';
@@ -932,6 +936,8 @@
                 currentChatPartner = null; // Clear active chat partner
                 authContainer.style.display = 'flex';
                 mainChatScreen.classList.add('hidden'); // Hide main chat screen
+                usersListView.style.display = 'flex'; // Ensure users list is shown on logout
+                activeChatView.style.display = 'none'; // Ensure active chat is hidden on logout
                 messagesArea.innerHTML = '';
                 emailInput.value = '';
                 passwordInput.value = '';
@@ -958,7 +964,7 @@
          * تبديل رؤية القائمة الجانبية.
          */
         menuButton.addEventListener('click', () => {
-            sidebar.classList.toggle('-translate-x-full');
+            sidebar.classList.toggle('open');
             sidebarOverlay.classList.toggle('active');
         });
 
@@ -966,9 +972,32 @@
          * إغلاق القائمة الجانبية عند النقر على الطبقة الشفافة.
          */
         sidebarOverlay.addEventListener('click', () => {
-            sidebar.classList.add('-translate-x-full');
+            sidebar.classList.remove('open');
             sidebarOverlay.classList.remove('active');
         });
+
+        // Sidebar Navigation Link Actions
+        profileLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('صفحة الملف الشخصي قيد التطوير!');
+            sidebar.classList.remove('open'); // Close sidebar after click
+            sidebarOverlay.classList.remove('active');
+        });
+
+        settingsLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('صفحة الإعدادات قيد التطوير!');
+            sidebar.classList.remove('open'); // Close sidebar after click
+            sidebarOverlay.classList.remove('active');
+        });
+
+        helpLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('صفحة المساعدة قيد التطوير!');
+            sidebar.classList.remove('open'); // Close sidebar after click
+            sidebarOverlay.classList.remove('active');
+        });
+
 
         // /////////////////////////////////////////////////////////////////
         // /////////////////// وظائف قائمة المستخدمين والبحث /////////////////
@@ -1038,7 +1067,7 @@
             const { data, error } = await supabase
                 .from('profiles')
                 .select('id, username, full_name, avatar_url')
-                .or(`username.ilike.%${query}%,full_name.ilike.%${query}%`); // البحث في اسم المستخدم أو الاسم الكامل
+                .or(`username.ilike.%${query}%,full_name.ilike.%${query}%`);
 
             if (error) {
                 console.error('خطأ في البحث عن المستخدمين:', error.message);
@@ -1092,7 +1121,7 @@
 
         /**
          * إضافة رسالة إلى واجهة المستخدم.
-         * @param {Object} message - كائن الرسالة يحتوي على content و user_id.
+         * @param {Object} message - كائن الرسالة يحتوي على content و sender_id.
          * @param {boolean} isSender - إذا كانت الرسالة مرسلة من المستخدم الحالي.
          */
         function addMessageToUI(message, isSender) {
@@ -1104,8 +1133,8 @@
                 senderIdentifier = currentUserProfile.username;
             } else if (!isSender && currentChatPartner && currentChatPartner.username) {
                 senderIdentifier = currentChatPartner.username;
-            } else if (message.user_id) {
-                senderIdentifier = message.user_id.substring(0, 8); // Fallback to partial ID
+            } else if (message.sender_id) { // FIX: Changed to message.sender_id
+                senderIdentifier = message.sender_id.substring(0, 8); // Fallback to partial ID
             }
 
             messageElement.innerHTML = `
@@ -1124,11 +1153,12 @@
          */
         async function loadMessagesForChat(chatPartnerId) {
             messagesArea.innerHTML = '<div class="loading-indicator">جارٍ تحميل الرسائل...</div>';
+            // التحقق من الرسائل المرسلة من المستخدم الحالي إلى الشريك، أو من الشريك إلى المستخدم الحالي
             const { data, error } = await supabase
                 .from('messages')
                 .select('*')
-                .or(`user_id.eq.${currentUserId},receiver_id.eq.${currentUserId}`) // رسائل حيث أنا مرسل أو مستلم
-                .or(`user_id.eq.${chatPartnerId},receiver_id.eq.${chatPartnerId}`) // رسائل حيث الشريك مرسل أو مستلم
+                // FIX: Updated query to use sender_id and receiver_id as per schema
+                .or(`and(sender_id.eq.${currentUserId},receiver_id.eq.${chatPartnerId}),and(sender_id.eq.${chatPartnerId},receiver_id.eq.${currentUserId})`)
                 .order('created_at', { ascending: true });
 
             if (error) {
@@ -1137,17 +1167,13 @@
                 return;
             }
 
-            messagesArea.innerHTML = ''; // Clear previous messages
-            const filteredMessages = data.filter(msg =>
-                (msg.user_id === currentUserId && msg.receiver_id === chatPartnerId) ||
-                (msg.user_id === chatPartnerId && msg.receiver_id === currentUserId)
-            );
-
-            if (filteredMessages.length === 0) {
+            messagesArea.innerHTML = '';
+            
+            if (data.length === 0) {
                 messagesArea.innerHTML = '<div class="no-users-message">ابدأ الدردشة! لا توجد رسائل سابقة.</div>';
             } else {
-                filteredMessages.forEach(message => {
-                    const isSender = message.user_id === currentUserId;
+                data.forEach(message => {
+                    const isSender = message.sender_id === currentUserId; // FIX: Changed to sender_id
                     addMessageToUI(message, isSender);
                 });
             }
@@ -1166,16 +1192,16 @@
             const { data, error } = await supabase
                 .from('messages')
                 .insert([
-                    { content: content, user_id: currentUserId, receiver_id: currentChatPartner.id }
+                    // FIX: Changed user_id to sender_id
+                    { content: content, sender_id: currentUserId, receiver_id: currentChatPartner.id }
                 ]);
 
             if (error) {
                 console.error('خطأ في إرسال الرسالة:', error.message);
-                // يمكن إضافة رسالة خطأ للمستخدم هنا
             } else {
-                messageInput.value = ''; // مسح حقل الإدخال بعد الإرسال
-                // إضافة الرسالة إلى واجهة المستخدم مباشرة للمرسل
-                addMessageToUI({ content: content, user_id: currentUserId, receiver_id: currentChatPartner.id }, true);
+                messageInput.value = '';
+                // FIX: Changed user_id to sender_id for local UI update
+                addMessageToUI({ content: content, sender_id: currentUserId, receiver_id: currentChatPartner.id }, true);
             }
 
             sendButton.disabled = false;
@@ -1201,18 +1227,14 @@
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
                 // إضافة الرسالة في الوقت الفعلي فقط إذا كانت موجهة إلي أو من المستخدم النشط حاليًا
                 if (currentChatPartner &&
-                    ((payload.new.user_id === currentChatPartner.id && payload.new.receiver_id === currentUserId) ||
-                     (payload.new.user_id === currentUserId && payload.new.receiver_id === currentChatPartner.id))) {
+                    ((payload.new.sender_id === currentChatPartner.id && payload.new.receiver_id === currentUserId) || // FIX: Changed user_id to sender_id
+                     (payload.new.sender_id === currentUserId && payload.new.receiver_id === currentChatPartner.id))) { // FIX: Changed user_id to sender_id
                     
                     console.log('رسالة جديدة في الوقت الفعلي:', payload.new);
                     const newMessage = payload.new;
-                    const isSender = newMessage.user_id === currentUserId;
+                    const isSender = newMessage.sender_id === currentUserId; // FIX: Changed to sender_id
                     addMessageToUI(newMessage, isSender);
                 }
-                // إذا لم يكن هناك دردشة مفتوحة، أعد تحميل قائمة المستخدمين لتحديث "آخر الدردشات" (إذا تم تنفيذها مستقبلاً)
-                // else if (!currentChatPartner) {
-                //     loadUsers(); // هذا سيحدث قائمة "آخر الدردشات" إذا تم دمج الرسالة الأخيرة
-                // }
             })
             .subscribe();
     </script>
